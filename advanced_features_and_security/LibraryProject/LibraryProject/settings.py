@@ -12,28 +12,35 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# ----------------------------
+# Base directory
+# ----------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # ----------------------------
-# Quick-start development settings - unsuitable for production
+# Security settings
 # ----------------------------
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-#=8#y3bmorxat-*a*t8p#px%=8q-u8n5gx_%7n&l399@kg^dp6'
+DEBUG = False
+ALLOWED_HOSTS = ['*']
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # Turn off in production
-
-# Update this with your production domain/IP
-ALLOWED_HOSTS = ['yourdomain.com', '127.0.0.1', 'localhost']
+# Security best practices
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+X_FRAME_OPTIONS = 'DENY'
 
 
 # ----------------------------
 # Application definition
 # ----------------------------
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,10 +57,10 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',  # CSRF protection
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',  # Prevent clickjacking
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -79,7 +86,6 @@ WSGI_APPLICATION = 'LibraryProject.wsgi.application'
 # ----------------------------
 # Database
 # ----------------------------
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -93,19 +99,17 @@ AUTH_USER_MODEL = "users.CustomUser"
 # ----------------------------
 # Password validation
 # ----------------------------
-
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 
 # ----------------------------
 # Internationalization
 # ----------------------------
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -113,40 +117,13 @@ USE_TZ = True
 
 
 # ----------------------------
-# Static files (CSS, JavaScript, Images)
+# Static files
 # ----------------------------
-
 STATIC_URL = 'static/'
-
-
-# ----------------------------
-# Security settings for production
-# ----------------------------
-
-# Browser security headers
-SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_CONTENT_TYPE_NOSNIFF = True
-
-# Cookies sent over HTTPS only
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-
-# HTTP Strict Transport Security (HSTS)
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-# Content Security Policy (if using django-csp middleware)
-# Add 'csp.middleware.CSPMiddleware' to MIDDLEWARE if using
-# Example policies can be set like this:
-# CSP_DEFAULT_SRC = ("'self'",)
-# CSP_SCRIPT_SRC = ("'self'", 'https://trusted-scripts.example.com')
-# CSP_STYLE_SRC = ("'self'", 'https://fonts.googleapis.com')
 
 
 # ----------------------------
 # Default primary key field type
 # ----------------------------
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
