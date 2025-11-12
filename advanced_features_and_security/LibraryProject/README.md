@@ -19,4 +19,21 @@ The purpose of this project is to understand the basic structure of a Django pro
 - **wsgi.py / asgi.py:** Used for deployment and server communication.
 
 ## Author
-Bryan Kariuki
+# Django Permissions and Groups
+
+## Groups
+- **Editors:** can_create, can_edit
+- **Viewers:** can_view
+- **Admins:** can_view, can_create, can_edit, can_delete
+
+## Permissions
+- Defined in `Book` model (`models.py`) under Meta:
+  - can_view
+  - can_create
+  - can_edit
+  - can_delete
+
+## Usage
+- Use `@permission_required('myapp.can_edit', raise_exception=True)` in views.
+- Assign users to groups via admin panel or Django shell.
+
