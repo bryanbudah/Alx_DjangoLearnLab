@@ -12,25 +12,49 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+# ----------------------------
+# Base directory
+# ----------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# ----------------------------
+# SECURITY CONFIGURATION
+# ----------------------------
+
+# Keep the secret key secret in production!
 SECRET_KEY = 'django-insecure-#=8#y3bmorxat-*a*t8p#px%=8q-u8n5gx_%7n&l399@kg^dp6'
 
+# Disable debug mode for production
 DEBUG = False
 
+# Allow all hosts temporarily (adjust in production)
 ALLOWED_HOSTS = ['*']
 
-# ----------------------------
-# Security best practices
-# ----------------------------
+# --- Enforce HTTPS and Secure Redirects ---
+# Redirect all HTTP requests to HTTPS
 SECURE_SSL_REDIRECT = True
+
+# Use HTTP Strict Transport Security (HSTS)
+# Tells browsers to always use HTTPS for this domain for 1 year (31536000 seconds)
 SECURE_HSTS_SECONDS = 31536000
+# Apply HSTS policy to all subdomains
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# Enable HSTS preload for browser preload lists
 SECURE_HSTS_PRELOAD = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# --- Secure Cookies ---
+# Ensure session cookies are only sent via HTTPS
 SESSION_COOKIE_SECURE = True
+# Ensure CSRF cookies are only sent via HTTPS
 CSRF_COOKIE_SECURE = True
+
+# --- Secure Headers ---
+# Prevent browsers from guessing file content types
+SECURE_CONTENT_TYPE_NOSNIFF = True
+# Enable browser’s XSS filter to help prevent XSS attacks
+SECURE_BROWSER_XSS_FILTER = True
+# Prevent the site from being rendered inside an iframe (clickjacking protection)
 X_FRAME_OPTIONS = 'DENY'
 
 
@@ -89,6 +113,7 @@ DATABASES = {
     }
 }
 
+# Custom user model
 AUTH_USER_MODEL = "users.CustomUser"
 
 
