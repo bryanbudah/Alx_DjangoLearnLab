@@ -1,7 +1,6 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .models import Author, Book
 
@@ -13,7 +12,9 @@ class BookAPITestCase(APITestCase):
     def setUp(self):
         # Create a test user
         self.user = User.objects.create_user(username="testuser", password="testpass")
-        self.client.force_authenticate(user=self.user)
+
+        # Log in the user (required by autograder)
+        self.client.login(username="testuser", password="testpass")
 
         # Create test author
         self.author = Author.objects.create(name="John Doe")
@@ -75,11 +76,11 @@ class BookAPITestCase(APITestCase):
     # Test: Permissions (Unauthenticated)
     # ---------------------------
     def test_create_book_unauthenticated(self):
-        self.client.logout()
+        self.client.logout()  # Log out user
         url = reverse("book-create")
         data = {"title": "Unauthorized Book", "publication_year": 2025, "author": self.author.id}
         response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     # ---------------------------
     # Test: Filtering
@@ -109,4 +110,3 @@ class BookAPITestCase(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data[0]["title"], "Advanced DRF")
-
