@@ -1,91 +1,87 @@
-from django.shortcuts import render
-from rest_framework import generics, permissions
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .models import Book
 from .serializers import BookSerializer
 
 # --------------------------------------------
-# List all books (read-only for everyone)
+# List all books (read-only for unauthenticated users)
 # --------------------------------------------
 class BookListView(generics.ListAPIView):
     """
     GET /api/books/
-    Retrieves a list of all books.
-    Accessible to anyone (unauthenticated users allowed).
+    List all books. Read-only for unauthenticated users.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 # --------------------------------------------
-# Retrieve single book by ID
+# Retrieve a single book by ID
 # --------------------------------------------
 class BookDetailView(generics.RetrieveAPIView):
     """
     GET /api/books/<int:pk>/
-    Retrieve details of a single book by its ID.
-    Accessible to anyone (unauthenticated users allowed).
+    Retrieve a single book. Read-only for unauthenticated users.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 # --------------------------------------------
-# Create a new book (authenticated users only)
+# Create a new book (authenticated only)
 # --------------------------------------------
 class BookCreateView(generics.CreateAPIView):
     """
     POST /api/books/create/
-    Create a new book.
-    Only authenticated users can create books.
+    Create a new book. Authenticated users only.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         """
-        Custom hook to run additional logic on creation.
+        Custom hook for additional logic on creation.
         """
         serializer.save()
 
 
 # --------------------------------------------
-# Update an existing book (authenticated users only)
+# Update an existing book (authenticated only)
 # --------------------------------------------
 class BookUpdateView(generics.UpdateAPIView):
     """
     PUT /api/books/<int:pk>/update/
-    Update an existing book.
-    Only authenticated users can update books.
+    Update a book. Authenticated users only.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def perform_update(self, serializer):
         """
-        Custom hook to run additional logic on update.
+        Custom hook for additional logic on update.
         """
         serializer.save()
 
 
 # --------------------------------------------
-# Delete a book (authenticated users only)
+# Delete a book (authenticated only)
 # --------------------------------------------
 class BookDeleteView(generics.DestroyAPIView):
     """
     DELETE /api/books/<int:pk>/delete/
-    Delete a book instance.
-    Only authenticated users can delete books.
+    Delete a book. Authenticated users only.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def perform_destroy(self, instance):
         """
-        Custom hook to run additional logic before deletion.
+        Custom hook for additional logic before deletion.
         """
         instance.delete()
+
