@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET KEY & DEBUG
 # --------------------------
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret-key")  # Use env var in production
-DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
+DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
 # --------------------------
 # ALLOWED HOSTS
@@ -27,8 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',        # Your app
-    # Add 'users' if you create a custom user model
+    'blog',        # Your blog app
+    # 'users',     # Uncomment if you have a custom user model
 ]
 
 # --------------------------
@@ -56,8 +56,8 @@ WSGI_APPLICATION = 'django_blog.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],  # Project-wide templates
-        'APP_DIRS': True,                  # App templates
+        'DIRS': [BASE_DIR / "templates"],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -70,12 +70,16 @@ TEMPLATES = [
 ]
 
 # --------------------------
-# DATABASE
+# DATABASE (PostgreSQL)
 # --------------------------
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Use PostgreSQL/MySQL in production
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv("POSTGRES_DB", "mydb"),
+        'USER': os.getenv("POSTGRES_USER", "postgres"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD", "password"),
+        'HOST': os.getenv("POSTGRES_HOST", "localhost"),
+        'PORT': os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
@@ -101,11 +105,11 @@ USE_TZ = True
 # STATIC FILES
 # --------------------------
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]  # For project-wide static files
-STATIC_ROOT = BASE_DIR / "staticfiles"    # Collected static files for production
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # --------------------------
-# MEDIA FILES (User uploads)
+# MEDIA FILES
 # --------------------------
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
