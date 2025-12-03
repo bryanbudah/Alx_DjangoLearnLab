@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Blog | Home</title>
+
+    <!-- Bootstrap CDN (optional but recommended) -->
+    <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="{% static 'blog/style.css' %}">
+</head>
+
+<body class="bg-light">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">Django Blog</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/">Admin</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2 class="mb-4">Latest Posts</h2>
+
+        {% if posts %}
+            <div class="list-group">
+                {% for post in posts %}
+                    <a href="#" class="list-group-item list-group-item-action mb-2 shadow-sm">
+                        <h4 class="mb-1">{{ post.title }}</h4>
+                        <p class="mb-1 text-muted">
+                            Published {{ post.published_date|date:"M d, Y" }}  
+                            by {{ post.author.username }}
+                        </p>
+                        <p>{{ post.content|truncatewords:30 }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+
+        {% else %}
+            <p class="text-muted">No posts available yet.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>
